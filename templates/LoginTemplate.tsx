@@ -17,6 +17,9 @@ export default function LoginTemplate() {
       redirect: false,
       callbackUrl: '/'
     });
+
+    console.log('response => ', response)
+
     if (response?.ok && response?.url) router.push('/');
   }
 
