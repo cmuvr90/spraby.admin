@@ -19,12 +19,12 @@ export default withAuth(
     }
   },
   {
-    callbacks: {
-      authorized: (data) => {
-        console.log('TOKEN data =>> ', data)
-        return true
-      }
-    }
+    // callbacks: {
+    //   authorized: (data) => {
+    //     console.log('TOKEN data =>> ', data)
+    //     return true
+    //   }
+    // }
   }
 )
 
