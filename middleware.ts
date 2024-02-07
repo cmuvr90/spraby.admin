@@ -20,9 +20,9 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: ({token}) => {
-        console.log('token =>> ', token)
-        return !!token
+      authorized: (data) => {
+        console.log('TOKEN data =>> ', data)
+        return true
       }
     }
   }
