@@ -1,4 +1,4 @@
-import RegisterTemplate from "@/templates/RegisterTemplate";
+import RegisterTemplate from "@/theme/templates/RegisterTemplate";
 
 export default async function Page() {
   return <RegisterTemplate/>

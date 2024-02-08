@@ -18,14 +18,6 @@ export default withAuth(
       return NextResponse.rewrite(new URL('/denied', request.url))
     }
   },
-  {
-    // callbacks: {
-    //   authorized: (data) => {
-    //     console.log('TOKEN data =>> ', data)
-    //     return true
-    //   }
-    // }
-  }
 )
 
 export const config = {matcher: ["/admin/:path*", "/"]}
