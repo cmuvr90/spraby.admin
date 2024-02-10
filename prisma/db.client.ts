@@ -1,4 +1,4 @@
-import {PrismaClient, Users} from '@prisma/client'
+import {PrismaClient} from '@prisma/client'
 
 declare global {
   var prisma: PrismaClient
@@ -7,5 +7,3 @@ declare global {
 const prisma: PrismaClient = global.prisma || new PrismaClient()
 
 export default prisma
-
-export type UsersModel = Users

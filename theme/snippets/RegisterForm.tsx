@@ -1,21 +1,24 @@
 'use client'
 
-import {Alert, Button, CircularProgress, Stack, TextField, Typography} from "@mui/material";
 import {signIn} from "next-auth/react";
 import {useRouter} from "next/navigation";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {createUser} from "@/services/Users";
+import {App, Form, Input, Button} from "antd";
 
 export default function RegisterForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const {message} = App.useApp();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const onRegister = async () => {
+  useEffect(() => {
+    if (error?.length) message.error(error, 2);
+  }, [error]);
+
+  const onRegister = async (values: { email: string, password: string }) => {
     setLoading(true);
-    const user = await createUser({email, password});
+    const user = await createUser(values);
     let error = null;
 
     if (user) {
@@ -23,11 +26,10 @@ export default function RegisterForm() {
         email: user.email,
         password: user.password,
         redirect: false,
-        callbackUrl: '/'
       });
 
       if (response?.ok && response?.url) {
-        router.push('/');
+        router.push(`/${user.role}`);
       } else {
         error = 'Incorrect login or password'
       }
@@ -42,28 +44,34 @@ export default function RegisterForm() {
     }
   }
 
-  return <Stack spacing={2}>
-    <Typography variant="h4" component="h2" align={'center'}>
-      Sing up
-    </Typography>
-    <TextField
-      label="Email"
-      variant="standard"
-      onChange={(e: any) => setEmail(e.target.value)}
-      value={email}
-    />
-    <TextField
-      label="Password"
-      variant="standard"
-      type={'password'}
-      onChange={(e: any) => setPassword(e.target.value)}
-      value={password}
-    />
-    <Button onClick={onRegister} disabled={loading || !email.length || !password.length}>
-      {loading ? <CircularProgress size={20}/> : 'Send'}
-    </Button>
-    {
-      error && <Alert severity="error">{error}</Alert>
-    }
-  </Stack>
+  return <Form
+    name="login"
+    onFinish={onRegister}
+    autoComplete="off"
+  >
+    <Form.Item<FieldType>
+      name="email"
+      rules={[{required: true, message: 'Is required'}]}
+    >
+      <Input placeholder={'Email'}/>
+    </Form.Item>
+
+    <Form.Item<FieldType>
+      name="password"
+      rules={[{required: true, message: 'Is required'}]}
+    >
+      <Input.Password placeholder={'Password'}/>
+    </Form.Item>
+
+    <Form.Item>
+      <Button type="primary" htmlType="submit" block loading={loading}>
+        Register
+      </Button>
+    </Form.Item>
+  </Form>
 }
+
+type FieldType = {
+  email?: string;
+  password?: string;
+};

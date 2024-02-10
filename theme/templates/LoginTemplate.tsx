@@ -1,10 +1,9 @@
 'use client'
 
-import {Container} from "@mui/material";
 import LoginForm from "@/theme/snippets/LoginForm";
 
 export default function LoginTemplate() {
-  return <Container maxWidth="sm" style={{padding: '20px', maxWidth: '300px'}}>
+  return <div style={{maxWidth: '300px', margin: '20px auto'}}>
     <LoginForm/>
-  </Container>
+  </div>
 }
