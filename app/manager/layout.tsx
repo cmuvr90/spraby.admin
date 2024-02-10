@@ -1,14 +1,14 @@
 import type {Metadata} from "next";
 import {ReactNode} from "react";
-import AdminLayout from "@/theme/layouts/AdminLayout";
+import ManagerLayout from "@/theme/layouts/ManagerLayout";
 
 export const metadata: Metadata = {
-  title: "Spraby Admin",
-  description: "Spraby Admin",
+  title: "Spraby Manager",
+  description: "Spraby Manager",
 };
 
 export default function Layout({children}: Readonly<{ children: ReactNode }>) {
-  return <AdminLayout>
+  return <ManagerLayout>
     {children}
-  </AdminLayout>
+  </ManagerLayout>
 }

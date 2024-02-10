@@ -23,8 +23,7 @@ export default function RegisterForm() {
 
     if (user) {
       const response = await signIn('credentials', {
-        email: user.email,
-        password: user.password,
+        ...values,
         redirect: false,
       });
 

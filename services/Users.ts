@@ -16,6 +16,7 @@ export async function createUser(params: CreateUserParams) {
   return db.users.create({
     data: {
       email: params.email,
+      // role: 'admin', //todo remove
       password: await bcrypt.hash(params.password, 3)
     }
   }) as Promise<UsersModel | null>

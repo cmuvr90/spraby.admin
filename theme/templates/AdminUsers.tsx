@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from "react";
 import {Table, Tag} from 'antd';
 import type {TableProps} from 'antd';
-import {UsersModel} from "@/prisma/db.client";
+import {UsersModel} from "@/prisma/types";
 import {getUsersList} from "@/services/Users";
 
 export default function AdminUsers() {

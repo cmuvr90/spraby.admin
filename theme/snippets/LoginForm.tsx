@@ -22,7 +22,11 @@ export default function LoginForm() {
       redirect: false,
     });
     if (response?.ok && response?.url) {
-      router.push('/admin');
+      if (window.location) {
+        window.location.href = window.location.origin;
+      } else {
+        router.prefetch('/');
+      }
     } else {
       setError('Incorrect login or password');
       setLoading(false);

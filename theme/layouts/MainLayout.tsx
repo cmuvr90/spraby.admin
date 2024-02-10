@@ -1,6 +1,7 @@
 'use client'
 
 import React, {ReactNode, useEffect, useState} from 'react';
+import {SessionProvider} from "next-auth/react";
 
 const MainLayout = ({children}: { children: ReactNode }) => {
   const [opacity, setOpacity] = useState(0)
@@ -11,9 +12,11 @@ const MainLayout = ({children}: { children: ReactNode }) => {
     })
   }, [])
 
-  return <div style={{opacity, transition: '1s opacity'}}>
-    {children}
-  </div>
+  return <SessionProvider>
+    <div style={{opacity, transition: '1s opacity'}}>
+      {children}
+    </div>
+  </SessionProvider>
 };
 
 export default MainLayout;
