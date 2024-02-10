@@ -11,8 +11,10 @@ import {
   BarsOutlined
 } from '@ant-design/icons';
 import type {MenuProps} from 'antd';
-import {Layout, Menu, theme, Typography} from 'antd';
+import {Layout, Menu, Flex, Typography} from 'antd';
 import {useRouter, usePathname} from "next/navigation";
+import UserPanel from "@/theme/snippets/UserPanel";
+import {SessionProvider} from "next-auth/react";
 
 const {Header, Content, Footer, Sider} = Layout;
 
@@ -21,12 +23,13 @@ const AdminLayout = ({children}: Readonly<{ children: ReactNode }>) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  console.log('pathname => ', pathname)
-
-  return (
+  return <SessionProvider>
     <Layout style={{minHeight: '100vh'}}>
-      <Header style={{display: 'flex', alignItems: 'center'}}>
-        <Typography.Text style={{color: '#fff'}}>SPRABY ADMIN</Typography.Text>
+      <Header style={{display: 'flex', alignItems: 'center', padding: '20px'}}>
+        <Flex justify={'space-between'} align={'center'} style={{width: '100%'}}>
+          <Typography.Text style={{color: '#fff'}}>SPRABY ADMIN</Typography.Text>
+          <UserPanel/>
+        </Flex>
       </Header>
       <Layout>
         <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
@@ -44,7 +47,7 @@ const AdminLayout = ({children}: Readonly<{ children: ReactNode }>) => {
         </Layout>
       </Layout>
     </Layout>
-  );
+  </SessionProvider>
 };
 
 export default AdminLayout;

@@ -20,10 +20,9 @@ export default function LoginForm() {
     const response = await signIn('credentials', {
       ...values,
       redirect: false,
-      callbackUrl: '/'
     });
     if (response?.ok && response?.url) {
-      router.push('/');
+      router.push('/admin');
     } else {
       setError('Incorrect login or password');
       setLoading(false);
