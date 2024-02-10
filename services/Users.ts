@@ -1,6 +1,18 @@
 'use server'
 import db from "@/prisma/db";
-import {UsersModel} from "@/prisma/types";
+import Prisma, {Paginator, UsersModel} from "@/prisma/types";
+
+/**
+ *
+ * @param params
+ * @param conditions
+ */
+export async function getUsersPage(params = {limit: 10, page: 1}, conditions?: Prisma.UsersFindManyArgs) {
+  return await db.users.getPage(conditions ?? {}, params) as {
+    items: UsersModel[]
+    paginator: Paginator
+  }
+}
 
 export async function getUsersList() {
   return db.users.findMany() as Promise<UsersModel[]>

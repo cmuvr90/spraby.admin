@@ -7,7 +7,7 @@ import Prisma from "@/prisma/types"
  * @param params
  */
 async function getPage(conditions: Prisma.UsersFindManyArgs, params = {limit: 10, page: 1}) {
-  const totalCount = await prisma.users.count({...(conditions?.where ? {where: conditions?.where} : {})})
+  const total = await prisma.users.count({...(conditions?.where ? {where: conditions?.where} : {})})
 
   const items = await prisma.users.findMany({
     orderBy: {
@@ -20,10 +20,11 @@ async function getPage(conditions: Prisma.UsersFindManyArgs, params = {limit: 10
 
   return {
     items,
-    paginator: {limit: params.limit, page: params.page, totalCount, totalPage: Math.ceil(totalCount / params.limit)},
+    paginator: {pageSize: params.limit, current: params.page, total, pages: Math.ceil(total / params.limit)},
   }
 }
 
 export default {
-  ...prisma.users
+  ...prisma.users,
+  getPage
 }
