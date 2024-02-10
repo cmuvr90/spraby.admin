@@ -1,14 +1,19 @@
 'use client'
 
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
-import {Button, Form, Input} from 'antd';
+import {App, Button, Form, Input} from 'antd';
 import {signIn} from "next-auth/react";
 
 export default function LoginForm() {
+  const {message} = App.useApp();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    if (error?.length) message.error(error, 2);
+  }, [error]);
 
   const onLogin = async (values: { email: string, password: string }) => {
     setLoading(true);
