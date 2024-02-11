@@ -28,9 +28,9 @@ export default function User({params}: PageParams) {
    *
    * @param values
    */
-  const onSave = async (values: Prisma.UsersUpdateInput) => {
+  const onSave = async (values: UsersModel) => {
     setLoading(true);
-    const user = await update({where: {id}, data: values})
+    const user = await update({where: {id}, data: (values as Prisma.UsersUpdateInput)})
     if (user) setUser(user);
     setLoading(false);
   }
@@ -43,15 +43,15 @@ export default function User({params}: PageParams) {
       fields={user ? Object.entries(user).map(([name, value]) => ({name, value})) : []}
       autoComplete="off"
     >
-      <Form.Item<Prisma.UsersUpdateInput> name="firstName">
+      <Form.Item<UsersModel> name="firstName">
         <Input placeholder={'First name'}/>
       </Form.Item>
 
-      <Form.Item<Prisma.UsersUpdateInput> name="lastName">
+      <Form.Item<UsersModel> name="lastName">
         <Input placeholder={'Last name'}/>
       </Form.Item>
 
-      <Form.Item<Prisma.UsersUpdateInput> name="email">
+      <Form.Item<UsersModel> name="email">
         <Input placeholder={'Email'} type={'email'}/>
       </Form.Item>
 

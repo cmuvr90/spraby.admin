@@ -30,9 +30,9 @@ export default function Brand({params}: PageParams) {
    *
    * @param values
    */
-  const onUpdate = async (values: Prisma.BrandsUpdateInput) => {
+  const onUpdate = async (values: BrandsModel) => {
     setLoading(true);
-    const brand = await update({where: {id}, data: values})
+    const brand = await update({where: {id}, data: (values as Prisma.BrandsUpdateInput)})
     if (brand) setBrand(brand);
     setLoading(false);
   }
@@ -41,9 +41,9 @@ export default function Brand({params}: PageParams) {
    *
    * @param values
    */
-  const onCreate = async (values: Prisma.BrandsUpdateInput) => {
+  const onCreate = async (values: BrandsModel) => {
     setLoading(true);
-    const brand = await create(values)
+    const brand = await create(values as Prisma.BrandsCreateInput)
     if (brand?.id) router.push(`/admin/brands/${brand.id}`);
   }
 
@@ -55,11 +55,11 @@ export default function Brand({params}: PageParams) {
       fields={brand ? Object.entries(brand).map(([name, value]) => ({name, value})) : []}
       autoComplete="off"
     >
-      <Form.Item<Prisma.BrandsUpdateInput> name="name">
+      <Form.Item<BrandsModel> name="name">
         <Input placeholder={'Name'}/>
       </Form.Item>
 
-      <Form.Item<Prisma.BrandsUpdateInput> name="description">
+      <Form.Item<BrandsModel> name="description">
         <Input placeholder={'Description'}/>
       </Form.Item>
 
