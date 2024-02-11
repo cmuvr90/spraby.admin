@@ -1,31 +1,31 @@
 'use client'
 
 import React, {useEffect, useState} from "react";
-import {Table, Tag} from 'antd';
+import {Table} from 'antd';
 import type {TableProps} from 'antd';
-import {UsersModel} from "@/prisma/types";
-import {getPage} from "@/services/Users";
+import {BrandsModel} from "@/prisma/types";
+import {getPage} from "@/services/Brands";
 import Link from "next/link";
 import type {Paginator} from "@/types";
 
-export default function AdminUsers() {
-  const [users, setUsers] = useState<UsersModel[]>([])
+export default function Brands() {
+  const [brands, setBrands] = useState<BrandsModel[]>([])
   const [paginator, setPaginator] = useState<Paginator>()
   const [loading, setLoading] = useState(true);
   const [params, setParams] = useState({limit: 1, page: 1})
 
   useEffect(() => {
-    onGetUsers(params).then()
+    onGetBrands(params).then()
   }, [params]);
 
   /**
    *
    * @param params
    */
-  const onGetUsers = async (params: QueryParams) => {
+  const onGetBrands = async (params: QueryParams) => {
     setLoading(true)
     const {items = [], paginator = null} = await getPage(params)
-    setUsers(items)
+    setBrands(items)
     if (paginator) setPaginator(paginator)
     setLoading(false)
   }
@@ -48,7 +48,7 @@ export default function AdminUsers() {
     loading={loading}
     scroll={{x: true}}
     columns={columns}
-    dataSource={users.map(i => ({...i, key: i.id}))}
+    dataSource={brands.map(i => ({...i, key: i.id}))}
     pagination={paginator}
   />
 }
@@ -58,23 +58,9 @@ const columns: TableProps['columns'] = [
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
-    render: (_, user: UsersModel) => {
-      const name = [user.firstName, user.lastName].filter(i => i?.length).join(' ');
-      return <Link href={`/admin/users/${user.id}`}>{name?.length ? name : user.email}</Link>
+    render: (_, brand: BrandsModel) => {
+      return <Link href={`/admin/brands/${brand.id}`}>{brand.name}</Link>
     }
-  },
-  {
-    title: 'Email',
-    dataIndex: 'email',
-    key: 'email',
-  },
-  {
-    title: 'Role',
-    dataIndex: 'role',
-    key: 'role',
-    render: (role) => <Tag color={'blue'}>
-      {role.toUpperCase()}
-    </Tag>
   }
 ];
 

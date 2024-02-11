@@ -4,6 +4,6 @@ declare global {
   var prisma: PrismaClient
 }
 
-const prisma: PrismaClient = global.prisma || new PrismaClient()
+const db: PrismaClient = global.prisma || new PrismaClient()
 
-export default prisma
+export default db

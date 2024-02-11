@@ -3,7 +3,7 @@
 import {signIn} from "next-auth/react";
 import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
-import {createUser} from "@/services/Users";
+import {create} from "@/services/Users";
 import {App, Form, Input, Button} from "antd";
 
 export default function RegisterForm() {
@@ -18,7 +18,7 @@ export default function RegisterForm() {
 
   const onRegister = async (values: { email: string, password: string }) => {
     setLoading(true);
-    const user = await createUser(values);
+    const user = await create(values);
     let error = null;
 
     if (user) {

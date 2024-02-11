@@ -1,5 +1,11 @@
-import {Users, Prisma} from '@prisma/client'
+import {Users, Brands, Prisma} from '@prisma/client'
 
 export default Prisma
-export type UsersModel = Users
-export type Paginator = { pageSize: number, current: number, total: number, pages: number }
+
+
+export type UsersModel = Users & {
+  brands?: BrandsModel[]
+}
+export type BrandsModel = Brands & {
+  user?: UsersModel
+}

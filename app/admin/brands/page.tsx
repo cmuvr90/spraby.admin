@@ -1,6 +1,6 @@
 import React from "react";
-import AdminBrands from "@/theme/templates/AdminBrands";
+import Brands from "@/theme/templates/Brands";
 
 export default function Page() {
-  return <AdminBrands/>
+  return <Brands/>
 }

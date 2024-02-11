@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {usePathname, useRouter} from "next/navigation";
 import {Menu, Layout} from 'antd';
 import type {MenuProps} from 'antd';
@@ -15,6 +15,15 @@ export default function PageDrawer({menu = []}: { menu: MenuItem[] }) {
     setCollapsed(isMobile)
   }, []);
 
+  /**
+   *
+   */
+  const activeKey = useMemo(() => {
+    const path = (pathname ?? '').split('/').filter((_, i) => i < 3).join('/');
+    const activeMenuItem = menu.find(i => i?.key === path)
+    return activeMenuItem?.key as string ?? '0';
+  }, [pathname, menu])
+
   return <Layout.Sider
     collapsible
     collapsed={collapsed}
@@ -23,9 +32,14 @@ export default function PageDrawer({menu = []}: { menu: MenuItem[] }) {
   >
     <Menu
       theme="dark"
-      defaultSelectedKeys={[pathname as string]}
-      mode="inline"
+      defaultSelectedKeys={[activeKey]}
+      selectedKeys={[activeKey]}
+      mode="vertical"
       items={menu}
+      selectable
+      // onMouseDown={(data) => console.log(data)}
+      // onChange={(data) => console.log(data)}
+      // onSelect={(data) => console.log(data)}
       onClick={(data) => router.push(data.key)}
     />
   </Layout.Sider>
