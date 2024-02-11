@@ -9,7 +9,11 @@ export default function MainPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (session?.data?.user?.id) router.push(`/${session.data.user.role}`)
+    if (session?.data?.user?.id) {
+      router.push(`/${session.data.user.role}`)
+    } else {
+      router.push(`/login`)
+    }
   }, [session]);
 
   return <div/>

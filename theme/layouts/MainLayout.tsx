@@ -9,11 +9,11 @@ const MainLayout = ({children}: { children: ReactNode }) => {
   useEffect(() => {
     setTimeout(() => {
       setOpacity(1)
-    })
+    },300)
   }, [])
 
   return <SessionProvider>
-    <div style={{opacity, transition: '1s opacity'}}>
+    <div style={{opacity, transition: '1.3s opacity'}}>
       {children}
     </div>
   </SessionProvider>

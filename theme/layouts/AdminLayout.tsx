@@ -1,6 +1,6 @@
 'use client'
 
-import React, {ReactNode, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import {
   GlobalOutlined,
   UserOutlined,
@@ -15,6 +15,7 @@ import {Layout, Menu, Flex, Typography} from 'antd';
 import {useRouter, usePathname} from "next/navigation";
 import UserPanel from "@/theme/snippets/UserPanel";
 import {SessionProvider} from "next-auth/react";
+import {isMobile} from 'react-device-detect';
 
 const {Header, Content, Footer, Sider} = Layout;
 
@@ -22,6 +23,10 @@ const AdminLayout = ({children}: Readonly<{ children: ReactNode }>) => {
   const [collapsed, setCollapsed] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+
+  useEffect(() => {
+    setCollapsed(isMobile)
+  }, []);
 
   return <SessionProvider>
     <Layout style={{minHeight: '100vh'}}>
@@ -32,11 +37,22 @@ const AdminLayout = ({children}: Readonly<{ children: ReactNode }>) => {
         </Flex>
       </Header>
       <Layout>
-        <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-          <div className="demo-logo-vertical"/>
-          <Menu theme="dark" defaultSelectedKeys={[pathname as string]} mode="inline" items={items}
-                onClick={(data) => router.push(data.key)}/>
+
+        <Sider
+          collapsible
+          collapsed={collapsed}
+          onCollapse={setCollapsed}
+          collapsedWidth={isMobile ? 40: 80}
+        >
+          <Menu
+            theme="dark"
+            defaultSelectedKeys={[pathname as string]}
+            mode="inline"
+            items={items}
+            onClick={(data) => router.push(data.key)}
+          />
         </Sider>
+
         <Layout>
           <Content style={{padding: '20px'}}>
             {children}

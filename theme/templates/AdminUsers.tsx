@@ -44,6 +44,7 @@ export default function AdminUsers() {
   return <Table
     onChange={handleTableChange}
     loading={loading}
+    scroll={{x: true}}
     columns={columns}
     dataSource={users.map(i => ({...i, key: i.id}))}
     pagination={paginator}
