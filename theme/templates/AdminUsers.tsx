@@ -1,7 +1,7 @@
 'use client'
 
 import React, {useEffect, useState} from "react";
-import {Table, Tag} from 'antd';
+import {Card, Table, Tag} from 'antd';
 import type {TableProps} from 'antd';
 import {UsersModel} from "@/prisma/types";
 import {getPage} from "@/services/Users";
@@ -43,14 +43,16 @@ export default function AdminUsers() {
     })
   }
 
-  return <Table
-    onChange={handleTableChange}
-    loading={loading}
-    scroll={{x: true}}
-    columns={columns}
-    dataSource={users.map(i => ({...i, key: i.id}))}
-    pagination={paginator}
-  />
+  return <Card>
+    <Table
+      onChange={handleTableChange}
+      loading={loading}
+      scroll={{x: true}}
+      columns={columns}
+      dataSource={users.map(i => ({...i, key: i.id}))}
+      pagination={paginator}
+    />
+  </Card>
 }
 
 const columns: TableProps['columns'] = [

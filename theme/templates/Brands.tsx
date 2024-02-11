@@ -1,7 +1,7 @@
 'use client'
 
 import React, {useEffect, useState} from "react";
-import {Table} from 'antd';
+import {Card, Table} from 'antd';
 import type {TableProps} from 'antd';
 import {BrandsModel} from "@/prisma/types";
 import {getPage} from "@/services/Brands";
@@ -43,14 +43,16 @@ export default function Brands() {
     })
   }
 
-  return <Table
-    onChange={handleTableChange}
-    loading={loading}
-    scroll={{x: true}}
-    columns={columns}
-    dataSource={brands.map(i => ({...i, key: i.id}))}
-    pagination={paginator}
-  />
+  return <Card>
+    <Table
+      onChange={handleTableChange}
+      loading={loading}
+      scroll={{x: true}}
+      columns={columns}
+      dataSource={brands.map(i => ({...i, key: i.id}))}
+      pagination={paginator}
+    />
+  </Card>
 }
 
 const columns: TableProps['columns'] = [

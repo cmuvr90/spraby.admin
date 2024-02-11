@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from "react";
 import {PageParams} from "@/types";
-import {Button, Flex, Form, Input} from "antd";
+import {Button, Card, Form, Input, Typography} from "antd";
 import {findById, update, create} from "@/services/Brands";
 import {BrandsModel} from "@/prisma/types";
 import Prisma from "@/prisma/types";
@@ -19,6 +19,10 @@ export default function Brand({params}: PageParams) {
     if (id) onGetBrand(id).then()
   }, [id]);
 
+  /**
+   *
+   * @param id
+   */
   const onGetBrand = async (id: string) => {
     setLoading(true);
     const brand = await findById(id)
@@ -47,29 +51,30 @@ export default function Brand({params}: PageParams) {
     if (brand?.id) router.push(`/admin/brands/${brand.id}`);
   }
 
-  return <div style={{maxWidth: '400px', margin: '0 auto'}}>
-    <Form
-      disabled={loading}
-      name="user"
-      onFinish={id ? onUpdate : onCreate}
-      fields={brand ? Object.entries(brand).map(([name, value]) => ({name, value})) : []}
-      autoComplete="off"
-    >
-      <Form.Item<BrandsModel> name="name">
-        <Input placeholder={'Name'}/>
-      </Form.Item>
-
-      <Form.Item<BrandsModel> name="description">
-        <Input placeholder={'Description'}/>
-      </Form.Item>
-
-      <Form.Item>
-        <Flex justify={'flex-end'}>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            {id ? 'Update' : 'Create'}
-          </Button>
-        </Flex>
-      </Form.Item>
-    </Form>
-  </div>
+  return <Form
+    disabled={loading}
+    name="brand"
+    onFinish={id ? onUpdate : onCreate}
+    fields={brand ? Object.entries(brand).map(([name, value]) => ({name, value})) : []}
+    autoComplete="off"
+  >
+    <div className={'flex flex-col gap-3'}>
+      <div className={'flex gap-3 justify-between items-center flex-wrap'}>
+        <Typography.Title level={2} style={{margin: 0}}>Brand</Typography.Title>
+        <Button type="primary" htmlType="submit" loading={loading}>
+          {id ? 'Update' : 'Create'}
+        </Button>
+      </div>
+      <div className={'flex gap-3 justify-between flex-wrap'}>
+        <Card loading={loading} className={'flex-grow min-w-60'}>
+          <Form.Item<BrandsModel> name="name">
+            <Input placeholder={'Name'}/>
+          </Form.Item>
+          <Form.Item<BrandsModel> name="description" style={{margin: 0}}>
+            <Input placeholder={'Description'}/>
+          </Form.Item>
+        </Card>
+      </div>
+    </div>
+  </Form>
 }
