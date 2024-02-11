@@ -41,7 +41,7 @@ export default function Brand({params}: PageParams) {
    *
    * @param values
    */
-  const onCreate = async (values: Prisma.BrandsCreateInput) => {
+  const onCreate = async (values: Prisma.BrandsUpdateInput) => {
     setLoading(true);
     const brand = await create(values)
     if (brand?.id) router.push(`/admin/brands/${brand.id}`);
