@@ -4,16 +4,17 @@ import React, {useEffect, useState} from "react";
 import {PageParams} from "@/types";
 import {Button, Card, Form, Input, Typography} from "antd";
 import {findById, update, create} from "@/services/Brands";
+import {getPage as getPageUsers} from "@/services/Users";
 import {BrandsModel} from "@/prisma/types";
 import Prisma from "@/prisma/types";
 import {useRouter} from "next/navigation";
+import ResourceDrawer from "@/theme/snippets/ResourceDrawer";
 
 export default function Brand({params}: PageParams) {
   const router = useRouter();
   const id = params.id;
   const [brand, setBrand] = useState<BrandsModel>();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (id) onGetBrand(id).then()
@@ -73,6 +74,9 @@ export default function Brand({params}: PageParams) {
           <Form.Item<BrandsModel> name="description" style={{margin: 0}}>
             <Input placeholder={'Description'}/>
           </Form.Item>
+        </Card>
+        <Card title={'User'} className={'flex-grow min-w-60'}>
+          <ResourceDrawer getResourceCallback={getPageUsers} columns={['email']} selectable multiSelect={false} limit={10}/>
         </Card>
       </div>
     </div>
