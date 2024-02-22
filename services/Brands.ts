@@ -13,9 +13,13 @@ export async function getList() {
 /**
  *
  * @param id
+ * @param include
  */
-export async function findById(id: string) {
-  return db.brands.findFirst({where: {id}}) as Promise<BrandsModel | null>
+export async function findById(id: string, include?: Prisma.BrandsInclude) {
+  return db.brands.findFirst({
+    where: {id},
+    ...(include ? {include} : {})
+  }) as Promise<BrandsModel | null>
 }
 
 /**
@@ -45,6 +49,9 @@ export async function getPage(params = {limit: 10, page: 1}, conditions?: Prisma
   const items = await db.brands.findMany({
     orderBy: {
       createdAt: 'desc',
+    },
+    include: {
+      user: true
     },
     ...conditions,
     skip: (params.page - 1) * params.limit,

@@ -7,10 +7,12 @@ import type {TableProps} from 'antd';
  *
  * @param getResourceCallback
  * @param multiSelect
+ * @param selectable
  * @param rowKey
  * @param columns
  * @param limit
- * @param title
+ * @param selectedItems
+ * @param onSelectCallback
  * @constructor
  */
 export default function ResourcePicker({
@@ -20,9 +22,11 @@ export default function ResourcePicker({
                                          rowKey = 'id',
                                          columns = [],
                                          limit = 10,
+                                         selectedItems = [],
+                                         onSelect: onSelectCallback = null
                                        }: Props) {
   const [loading, setLoading] = useState(false)
-  const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>(selectedItems);
 
   const [items, setItems] = useState<any[]>([])
   const [paginator, setPaginator] = useState<Paginator>()
@@ -31,6 +35,10 @@ export default function ResourcePicker({
   useEffect(() => {
     onGetUsers(params).then()
   }, [params]);
+
+  useEffect(() => {
+    if (typeof onSelectCallback === 'function') onSelectCallback(items.filter(i => selectedRowKeys.includes(i[rowKey]))).then()
+  }, [selectedRowKeys]);
 
   /**
    *
@@ -42,29 +50,6 @@ export default function ResourcePicker({
     setItems(items);
     if (paginator) setPaginator(paginator)
     setLoading(false);
-  }
-
-  /**
-   *
-   * @param item
-   * @param selected
-   */
-  const onSelect = (item: any, selected: boolean) => {
-    if (multiSelect) {
-      setSelectedRowKeys(v => selected ? [...v, item[rowKey]] : v.filter(i => i !== item[rowKey]))
-    } else {
-      setSelectedRowKeys(selected ? [item[rowKey]] : [])
-    }
-  }
-
-  /**
-   *
-   * @param keys
-   * @param items
-   * @param options
-   */
-  const onSelectAll = (keys: string[], items: any[], options: { type: 'all' | 'single' }) => {
-    if (options.type === 'all' && multiSelect) setSelectedRowKeys(keys);
   }
 
   /**
@@ -89,9 +74,8 @@ export default function ResourcePicker({
     rowSelection={selectable ? {
       checkStrictly: true,
       selectedRowKeys,
-      onSelect,
       type: multiSelect ? 'checkbox' : 'radio',
-      onChange: onSelectAll as any
+      onChange: setSelectedRowKeys as any
     } : undefined}
     columns={columns.map(i => typeof i === 'string' ? {dataIndex: i} : i)}
     dataSource={items}
@@ -101,11 +85,13 @@ export default function ResourcePicker({
 
 type Props = {
   getResourceCallback: (params: any) => Promise<{ items: any[], paginator?: Paginator }>
-  multiSelect?: boolean,
+  multiSelect?: boolean
   selectable?: boolean
-  rowKey?: string,
+  rowKey?: string
   columns?: any[]
   limit?: number
+  selectedItems?: string[]
+  onSelect?: ((items: any[]) => Promise<void>) | null
 }
 
 type Params = {

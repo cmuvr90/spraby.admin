@@ -2,13 +2,14 @@
 
 import React, {useEffect, useState} from "react";
 import {PageParams} from "@/types";
-import {Button, Card, Form, Input, Typography} from "antd";
+import {Avatar, Button, Card, Form, Input, Typography, message, Tooltip} from "antd";
 import {findById, update, create} from "@/services/Brands";
 import {getPage as getPageUsers} from "@/services/Users";
-import {BrandsModel} from "@/prisma/types";
+import {BrandsModel, UsersModel} from "@/prisma/types";
 import Prisma from "@/prisma/types";
 import {useRouter} from "next/navigation";
 import ResourceDrawer from "@/theme/snippets/ResourceDrawer";
+import {CloseOutlined, UserOutlined} from "@ant-design/icons";
 
 export default function Brand({params}: PageParams) {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function Brand({params}: PageParams) {
    */
   const onGetBrand = async (id: string) => {
     setLoading(true);
-    const brand = await findById(id)
+    const brand = await findById(id, {user: true})
     if (brand) setBrand(brand);
     setLoading(false);
   }
@@ -35,10 +36,11 @@ export default function Brand({params}: PageParams) {
    *
    * @param values
    */
-  const onUpdate = async (values: BrandsModel) => {
+  const onUpdate = async (values: Prisma.BrandsUpdateInput) => {
     setLoading(true);
     const brand = await update({where: {id}, data: (values as Prisma.BrandsUpdateInput)})
-    if (brand) setBrand(brand);
+    if (brand) await onGetBrand(id);
+    message.open({type: 'success', content: 'Updated'})
     setLoading(false);
   }
 
@@ -55,7 +57,7 @@ export default function Brand({params}: PageParams) {
   return <Form
     disabled={loading}
     name="brand"
-    onFinish={id ? onUpdate : onCreate}
+    onFinish={(values: any) => id ? onUpdate(values) : onCreate(values)}
     fields={brand ? Object.entries(brand).map(([name, value]) => ({name, value})) : []}
     autoComplete="off"
   >
@@ -67,17 +69,56 @@ export default function Brand({params}: PageParams) {
         </Button>
       </div>
       <div className={'flex gap-3 justify-between flex-wrap'}>
-        <Card loading={loading} className={'flex-grow min-w-60'}>
-          <Form.Item<BrandsModel> name="name">
-            <Input placeholder={'Name'}/>
-          </Form.Item>
-          <Form.Item<BrandsModel> name="description" style={{margin: 0}}>
-            <Input placeholder={'Description'}/>
-          </Form.Item>
-        </Card>
-        <Card title={'User'} className={'flex-grow min-w-60'}>
-          <ResourceDrawer getResourceCallback={getPageUsers} columns={['email']} selectable multiSelect={false} limit={10}/>
-        </Card>
+        <div className={'flex-grow w-7/12'}>
+          <Card loading={loading}>
+            <Form.Item<BrandsModel> name="name">
+              <Input placeholder={'Name'}/>
+            </Form.Item>
+            <Form.Item<BrandsModel> name="description" style={{margin: 0}}>
+              <Input placeholder={'Description'}/>
+            </Form.Item>
+          </Card>
+        </div>
+        <div className={'flex-grow min-w-40'}>
+          <Card title={'User'}>
+            <div className={'flex gap-3 flex-col'}>
+              {
+                !!brand?.user &&
+                <div className={'flex justify-start items-center w-full gap-3'}>
+                  <Avatar style={{backgroundColor: '#87d068'}} icon={<UserOutlined/>}/>
+                  <Typography.Text>{brand.user.email}</Typography.Text>
+                  <Tooltip title="remove">
+                    <CloseOutlined onClick={async () => {
+                      await onUpdate({user: {disconnect: true}})
+                    }}/>
+                  </Tooltip>
+                </div>
+              }
+              <div className={'flex justify-end w-full'}>
+                <ResourceDrawer
+                  getResourceCallback={(params) => getPageUsers(params, {
+                    where: {
+                      role: 'manager',
+                      brands: {
+                        every: {
+                          usersId: null
+                        }
+                      }
+                    }
+                  })}
+                  columns={['email']}
+                  selectable
+                  multiSelect={false}
+                  limit={10}
+                  selectedItems={brand?.usersId ? [brand.usersId] : []}
+                  onSelect={async (items: UsersModel[]) => {
+                    if (items?.length && id) await onUpdate({user: {connect: {id: items[0].id}}})
+                  }}
+                />
+              </div>
+            </div>
+          </Card>
+        </div>
       </div>
     </div>
   </Form>

@@ -25,6 +25,13 @@ const columns: TableProps['columns'] = [
     render: (_, brand: BrandsModel) => {
       return <Link href={`/admin/brands/${brand.id}`}>{brand.name}</Link>
     }
+  },
+  {
+    title: 'User',
+    dataIndex: 'userId',
+    render: (_, brand: BrandsModel) => {
+      return brand.user ? <Link href={`/admin/users/${brand.usersId}`}>{brand.user?.email}</Link> : '-'
+    }
   }
 ];
 

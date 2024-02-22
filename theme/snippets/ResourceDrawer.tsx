@@ -12,6 +12,8 @@ import ResourcePicker from "@/theme/snippets/ResourcePicker";
  * @param rowKey
  * @param columns
  * @param limit
+ * @param selectedItems
+ * @param onSelectCallback
  * @constructor
  */
 export default function ResourceDrawer({
@@ -22,8 +24,19 @@ export default function ResourceDrawer({
                                          rowKey = 'id',
                                          columns = [],
                                          limit = 10,
+                                         selectedItems = [],
+                                         onSelect: onSelectCallback = null
                                        }: Props) {
   const [open, setOpen] = useState(false)
+  const [selected, setSelected] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const onSelect = async () => {
+    setLoading(true);
+    if (typeof onSelectCallback === 'function') await onSelectCallback(selected)
+    setOpen(false)
+    setLoading(false);
+  }
 
   return <div>
     <div className={'flex justify-end'}>
@@ -36,17 +49,27 @@ export default function ResourceDrawer({
       onClose={() => setOpen(false)}
       open={open}
     >
-      {
-        open &&
-        <ResourcePicker
-          getResourceCallback={getResourceCallback}
-          multiSelect={multiSelect}
-          rowKey={rowKey}
-          columns={columns}
-          limit={limit}
-          selectable={selectable}
-        />
-      }
+      <div className={'flex flex-col gap-7'}>
+        {
+          open &&
+          <ResourcePicker
+            getResourceCallback={getResourceCallback}
+            multiSelect={multiSelect}
+            rowKey={rowKey}
+            columns={columns}
+            limit={limit}
+            selectable={selectable}
+            selectedItems={selectedItems}
+            onSelect={async items => setSelected(items)}
+          />
+        }
+        {
+          open &&
+          <div className={'flex justify-end'}>
+            <Button disabled={!selected?.length} loading={loading} onClick={onSelect}>Choose</Button>
+          </div>
+        }
+      </div>
     </Drawer>
   </div>
 }
@@ -60,4 +83,6 @@ type Props = {
   rowKey?: string,
   columns?: any[]
   limit?: number
+  selectedItems?: string[]
+  onSelect?: ((items: any[]) => Promise<void>) | null
 }
