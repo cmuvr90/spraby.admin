@@ -2,40 +2,36 @@
 import db from "@/prisma/db.client";
 import Prisma, {BrandsModel} from "@/prisma/types";
 
-
 /**
  *
+ * @param params
  */
-export async function getList() {
-  return db.brands.findMany() as Promise<BrandsModel[]>
-}
-
-/**
- *
- * @param id
- * @param include
- */
-export async function findById(id: string, include?: Prisma.BrandsInclude) {
-  return db.brands.findFirst({
-    where: {id},
-    ...(include ? {include} : {})
-  }) as Promise<BrandsModel | null>
+export async function findFirst(params?: Prisma.BrandsFindFirstArgs): Promise<BrandsModel | null> {
+  return db.brands.findFirst(params)
 }
 
 /**
  *
  * @param params
  */
-export async function update(params: Prisma.BrandsUpdateArgs) {
-  return db.brands.update(params) as Promise<BrandsModel | null>
+export async function update(params: Prisma.BrandsUpdateArgs): Promise<BrandsModel | null> {
+  return db.brands.update(params)
 }
 
 /**
  *
- * @param data
+ * @param params
  */
-export async function create(data: Prisma.BrandsCreateInput) {
-  return db.brands.create({data}) as Promise<BrandsModel | null>
+export async function create(params: Prisma.BrandsCreateArgs) {
+  return db.brands.create(params)
+}
+
+/**
+ *
+ * @param params
+ */
+export async function removeOne(params: Prisma.BrandsDeleteArgs) {
+  return db.brands.delete(params)
 }
 
 /**

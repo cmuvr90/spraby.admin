@@ -13,6 +13,7 @@ import type {TableProps} from 'antd';
  * @param limit
  * @param selectedItems
  * @param onSelectCallback
+ * @param refresh
  * @constructor
  */
 export default function ResourcePicker({
@@ -23,7 +24,8 @@ export default function ResourcePicker({
                                          columns = [],
                                          limit = 10,
                                          selectedItems = [],
-                                         onSelect: onSelectCallback = null
+                                         onSelect: onSelectCallback = null,
+                                         refresh,
                                        }: Props) {
   const [loading, setLoading] = useState(false)
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>(selectedItems);
@@ -33,8 +35,8 @@ export default function ResourcePicker({
   const [params, setParams] = useState<Params>({page: 1, limit})
 
   useEffect(() => {
-    onGetUsers(params).then()
-  }, [params]);
+    onGetUsers({...params, limit}).then()
+  }, [params, limit, refresh]);
 
   useEffect(() => {
     if (typeof onSelectCallback === 'function') onSelectCallback(items.filter(i => selectedRowKeys.includes(i[rowKey]))).then()
@@ -91,7 +93,8 @@ type Props = {
   columns?: any[]
   limit?: number
   selectedItems?: string[]
-  onSelect?: ((items: any[]) => Promise<void>) | null
+  onSelect?: ((items: any[]) => Promise<void>) | null,
+  refresh?: any
 }
 
 type Params = {

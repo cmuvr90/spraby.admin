@@ -12,6 +12,7 @@ import ResourcePicker from "@/theme/snippets/ResourcePicker";
  * @param rowKey
  * @param columns
  * @param limit
+ * @param disabled
  * @param selectedItems
  * @param onSelectCallback
  * @constructor
@@ -24,6 +25,7 @@ export default function ResourceDrawer({
                                          rowKey = 'id',
                                          columns = [],
                                          limit = 10,
+                                         disabled = false,
                                          selectedItems = [],
                                          onSelect: onSelectCallback = null
                                        }: Props) {
@@ -40,7 +42,7 @@ export default function ResourceDrawer({
 
   return <div>
     <div className={'flex justify-end'}>
-      <Button onClick={() => setOpen(true)}>Select</Button>
+      <Button disabled={disabled} onClick={() => setOpen(true)}>Select</Button>
     </div>
     <Drawer
       title={title}
@@ -76,6 +78,7 @@ export default function ResourceDrawer({
 
 type Props = {
   title?: string
+  disabled?: boolean
 
   getResourceCallback: (params: any) => Promise<{ items: any[], paginator?: Paginator }>
   multiSelect?: boolean,

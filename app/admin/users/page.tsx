@@ -1,6 +1,6 @@
 import React from "react";
-import AdminUsers from "@/theme/templates/AdminUsers";
+import Users from "@/theme/templates/Users";
 
 export default function Page() {
-  return <AdminUsers/>
+  return <Users/>
 }

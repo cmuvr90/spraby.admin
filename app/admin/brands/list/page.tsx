@@ -1,6 +1,6 @@
 import React from "react";
-import Brands from "@/theme/templates/Brands";
+import BrandsPage from "@/theme/templates/BrandsPage";
 
 export default function Page() {
-  return <Brands/>
+  return <BrandsPage/>
 }

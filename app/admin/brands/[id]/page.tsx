@@ -1,7 +1,7 @@
 import React from "react";
-import Brand from "@/theme/templates/Brand";
+import BrandPage from "@/theme/templates/BrandPage";
 import {PageParams} from "@/types";
 
 export default function Page(props: PageParams) {
-  return <Brand {...props}/>
+  return <BrandPage {...props}/>
 }

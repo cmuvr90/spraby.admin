@@ -6,7 +6,7 @@ import {Menu, Layout} from 'antd';
 import type {MenuProps} from 'antd';
 import {isMobile} from "react-device-detect";
 
-export default function PageDrawer({menu = []}: { menu: MenuItem[] }) {
+export default function LayoutDrawer({menu = []}: { menu: MenuItem[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);

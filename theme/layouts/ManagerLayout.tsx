@@ -10,7 +10,7 @@ import {Layout} from 'antd';
 import {SessionProvider} from "next-auth/react";
 import PageDrawer from "@/theme/snippets/PageDrawer";
 import PageHeader from "@/theme/snippets/PageHeader";
-import PageFooter from "@/theme/snippets/PageFooter";
+import LayoutFooter from "@/theme/snippets/LayoutFooter";
 import PageContent from "@/theme/snippets/PageContent";
 
 const ManagerLayout = ({children}: Readonly<{ children: ReactNode }>) => {
@@ -23,7 +23,7 @@ const ManagerLayout = ({children}: Readonly<{ children: ReactNode }>) => {
           <PageContent>
             {children}
           </PageContent>
-          <PageFooter/>
+          <LayoutFooter/>
         </Layout>
       </Layout>
     </Layout>

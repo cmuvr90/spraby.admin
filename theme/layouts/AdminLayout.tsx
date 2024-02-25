@@ -13,10 +13,7 @@ import {
 import type {MenuProps} from 'antd';
 import {Layout} from 'antd';
 import {SessionProvider} from "next-auth/react";
-import PageDrawer from "@/theme/snippets/PageDrawer";
-import PageHeader from "@/theme/snippets/PageHeader";
-import PageFooter from "@/theme/snippets/PageFooter";
-import PageContent from "@/theme/snippets/PageContent";
+import {LayoutFooter, LayoutHeader, LayoutDrawer, LayoutContent} from "@/theme/sections";
 import {useRouter} from "next/navigation";
 
 const AdminLayout = ({children}: { children: ReactNode }) => {
@@ -69,15 +66,15 @@ const AdminLayout = ({children}: { children: ReactNode }) => {
   ]
 
   return <SessionProvider>
-    <Layout style={{minHeight: '100vh'}}>
-      <PageHeader title={'SPRABY ADMIN'}/>
+    <Layout className={'min-h-lvh'}>
+      <LayoutHeader title={'SPRABY ADMIN'}/>
       <Layout>
-        <PageDrawer menu={menu} />
+        <LayoutDrawer menu={menu}/>
         <Layout>
-          <PageContent>
+          <LayoutContent>
             {children}
-          </PageContent>
-          <PageFooter/>
+          </LayoutContent>
+          <LayoutFooter/>
         </Layout>
       </Layout>
     </Layout>
