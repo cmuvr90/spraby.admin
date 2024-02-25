@@ -39,6 +39,9 @@ const AdminLayout = ({children}: { children: ReactNode }) => {
       icon: <ShopOutlined/>,
       onTitleClick: (data => router.push(data.key)),
       children: [{
+        key: '/admin/brands',
+        label: 'List',
+      }, {
         key: '/admin/brands/create',
         label: 'Create',
       }],
@@ -69,7 +72,7 @@ const AdminLayout = ({children}: { children: ReactNode }) => {
     <Layout style={{minHeight: '100vh'}}>
       <PageHeader title={'SPRABY ADMIN'}/>
       <Layout>
-        <PageDrawer menu={menu}/>
+        <PageDrawer menu={menu} />
         <Layout>
           <PageContent>
             {children}

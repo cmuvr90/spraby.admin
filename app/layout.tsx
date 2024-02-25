@@ -1,7 +1,7 @@
 import type {Metadata} from "next";
 import {Inter} from "next/font/google";
 import "./globals.css";
-import {App} from "antd";
+import {App, ConfigProvider} from "antd";
 import {ReactNode} from "react";
 import MainLayout from "@/theme/layouts/MainLayout";
 
@@ -17,9 +17,20 @@ export default function RootLayout({children}: { children: ReactNode }) {
     <html lang="en">
     <body className={inter.className}>
     <App>
-      <MainLayout>
-        {children}
-      </MainLayout>
+      <ConfigProvider theme={{
+        components: {
+          Layout: {
+            headerBg: '#00213f'
+          },
+          Menu: {
+            darkItemSelectedBg: 'rgba(255,255,255,0.16)'
+          }
+        }
+      }}>
+        <MainLayout>
+          {children}
+        </MainLayout>
+      </ConfigProvider>
     </App>
     </body>
     </html>
