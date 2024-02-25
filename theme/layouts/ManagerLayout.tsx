@@ -8,21 +8,18 @@ import {
 } from '@ant-design/icons';
 import {Layout} from 'antd';
 import {SessionProvider} from "next-auth/react";
-import PageDrawer from "@/theme/snippets/PageDrawer";
-import PageHeader from "@/theme/snippets/PageHeader";
-import LayoutFooter from "@/theme/snippets/LayoutFooter";
-import PageContent from "@/theme/snippets/PageContent";
+import {LayoutFooter, LayoutHeader, LayoutDrawer, LayoutContent} from "@/theme/sections";
 
 const ManagerLayout = ({children}: Readonly<{ children: ReactNode }>) => {
   return <SessionProvider>
     <Layout style={{minHeight: '100vh'}}>
-      <PageHeader title={'SPRABY MANAGER'}/>
+      <LayoutHeader title={'SPRABY'}/>
       <Layout>
-        <PageDrawer menu={menu}/>
+        <LayoutDrawer menu={menu}/>
         <Layout>
-          <PageContent>
+          <LayoutContent>
             {children}
-          </PageContent>
+          </LayoutContent>
           <LayoutFooter/>
         </Layout>
       </Layout>
