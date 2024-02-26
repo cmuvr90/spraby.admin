@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Table} from 'antd';
+import {Input, Table} from 'antd';
 import {Paginator} from "@/types";
 import type {TableProps} from 'antd';
 
@@ -32,10 +32,10 @@ export default function ResourcePicker({
 
   const [items, setItems] = useState<any[]>([])
   const [paginator, setPaginator] = useState<Paginator>()
-  const [params, setParams] = useState<Params>({page: 1, limit})
+  const [params, setParams] = useState<Params>({page: 1, limit, search: ''})
 
   useEffect(() => {
-    onGetUsers({...params, limit}).then()
+    onGetItems({...params, limit}).then()
   }, [params, limit, refresh]);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function ResourcePicker({
    *
    * @param params
    */
-  const onGetUsers = async (params: Params) => {
+  const onGetItems = async (params: Params) => {
     setLoading(true);
     const {items, paginator} = await getResourceCallback(params);
     setItems(items);
@@ -61,28 +61,36 @@ export default function ResourcePicker({
    * @param sorter
    */
   const onChange: TableProps['onChange'] = (pagination, filters, sorter) => {
-    setParams({
+    setParams(v => ({
+      ...v,
       page: pagination?.current ?? 1,
-      limit: pagination?.pageSize ?? limit
-    })
+      limit: pagination?.pageSize ?? limit,
+    }))
     setSelectedRowKeys([])
   }
 
-  return <Table
-    onChange={onChange}
-    rowKey={rowKey}
-    loading={loading}
-    scroll={{x: true}}
-    rowSelection={selectable ? {
-      checkStrictly: true,
-      selectedRowKeys,
-      type: multiSelect ? 'checkbox' : 'radio',
-      onChange: setSelectedRowKeys as any
-    } : undefined}
-    columns={columns.map(i => typeof i === 'string' ? {dataIndex: i} : i)}
-    dataSource={items}
-    pagination={(paginator && paginator?.total <= limit) ? false : paginator}
-  />
+  return <div className={'flex flex-col  bg-white rounded-lg'}>
+    <div className={'flex flex-nowrap p-5'}>
+      <Input value={params.search} onInput={(e: any) => {
+        setParams(v => ({...v, page: 1, search: e.target.value}))
+      }}/>
+    </div>
+    <Table
+      onChange={onChange}
+      rowKey={rowKey}
+      loading={loading}
+      scroll={{x: true}}
+      rowSelection={selectable ? {
+        checkStrictly: true,
+        selectedRowKeys,
+        type: multiSelect ? 'checkbox' : 'radio',
+        onChange: setSelectedRowKeys as any
+      } : undefined}
+      columns={columns.map(i => typeof i === 'string' ? {dataIndex: i} : i)}
+      dataSource={items}
+      pagination={(paginator && paginator?.total <= limit) ? false : paginator}
+    />
+  </div>
 }
 
 type Props = {
@@ -99,5 +107,6 @@ type Props = {
 
 type Params = {
   page: number,
-  limit: number
+  limit: number,
+  search: string
 }

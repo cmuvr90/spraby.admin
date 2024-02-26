@@ -52,7 +52,7 @@ export default function BrandsPage() {
     onAction: async () => router.push('/admin/brands/create')
   }]}>
     <ResourcePicker
-      getResourceCallback={getPage}
+      getResourceCallback={params => getPage(params, {include: {user: true}})}
       columns={columns}
       limit={10}
       refresh={refresh}

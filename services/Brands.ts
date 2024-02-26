@@ -39,15 +39,19 @@ export async function removeOne(params: Prisma.BrandsDeleteArgs) {
  * @param params
  * @param conditions
  */
-export async function getPage(params = {limit: 10, page: 1}, conditions?: Prisma.BrandsFindManyArgs) {
-  const total = await db.brands.count({...(conditions?.where ? {where: conditions?.where} : {})})
+export async function getPage(params = {limit: 10, page: 1, search: ''}, conditions?: Prisma.BrandsFindManyArgs) {
+  const where = {
+    ...(conditions?.where ?? {}),
+    ...(params?.search?.length ? {name: {contains: params.search, mode: 'insensitive'}} : {})
+  } as Prisma.BrandsWhereInput
+
+  conditions = conditions ? {...conditions, ...(Object.keys(where).length ? {where} : {})} : (Object.keys(where).length ? {where} : {})
+
+  const total = await db.brands.count({where: where})
 
   const items = await db.brands.findMany({
     orderBy: {
       createdAt: 'desc',
-    },
-    include: {
-      user: true
     },
     ...conditions,
     skip: (params.page - 1) * params.limit,

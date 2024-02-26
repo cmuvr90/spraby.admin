@@ -8,8 +8,23 @@ import Prisma, {UsersModel} from "@/prisma/types";
  * @param params
  * @param conditions
  */
-export async function getPage(params = {limit: 10, page: 1}, conditions?: Prisma.UsersFindManyArgs) {
-  const total = await db.users.count({...(conditions?.where ? {where: conditions?.where} : {})})
+export async function getPage(params = {limit: 10, page: 1, search: ''}, conditions?: Prisma.UsersFindManyArgs) {
+  const where = {
+    ...(conditions?.where ?? {}),
+    ...(params?.search?.length ? {
+      OR: [{
+        firstName: {contains: params.search, mode: 'insensitive'}
+      }, {
+        lastName: {contains: params.search, mode: 'insensitive'}
+      }, {
+        email: {contains: params.search, mode: 'insensitive'}
+      }]
+    } : {})
+  } as Prisma.UsersWhereInput
+
+  conditions = conditions ? {...conditions, ...(Object.keys(where).length ? {where} : {})} : (Object.keys(where).length ? {where} : {})
+
+  const total = await db.users.count({where: where})
 
   const items = await db.users.findMany({
     orderBy: {
