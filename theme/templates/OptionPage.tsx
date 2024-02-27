@@ -85,7 +85,7 @@ export default function OptionPage({params}: PageParams) {
   const onDelete = async () => {
     setDeleting(true)
     try {
-      await removeOne({where: {id}});
+      await removeOne(id);
       message.open({type: 'success', content: 'Deleted'})
       router.push(`/admin/options`);
     } catch (e: any) {

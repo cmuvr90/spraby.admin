@@ -1,4 +1,4 @@
-import {Users, Brands, Options, Prisma} from '@prisma/client'
+import {Users, Brands, Options, Categories, Collections, Prisma} from '@prisma/client'
 
 export default Prisma
 
@@ -10,4 +10,15 @@ export type BrandsModel = Brands & {
   user?: UsersModel
 }
 
-export type OptionsModel = Options
+export type OptionsModel = Options & {
+  Categories?: CategoriesModel[]
+}
+
+export type CategoriesModel = Categories & {
+  Options?: OptionsModel[]
+  Collections?: CollectionsModel[]
+}
+
+export type CollectionsModel = Collections & {
+  Categories?: Categories[]
+}

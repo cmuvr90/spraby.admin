@@ -1,6 +1,6 @@
 'use server'
 import db from "@/prisma/db.client";
-import Prisma, {OptionsModel} from "@/prisma/types";
+import Prisma, {CategoriesModel, OptionsModel} from "@/prisma/types";
 
 /**
  *
@@ -22,16 +22,24 @@ export async function update(params: Prisma.OptionsUpdateArgs): Promise<OptionsM
  *
  * @param params
  */
-export async function create(params: Prisma.OptionsCreateArgs) {
+export async function create(params: Prisma.OptionsCreateArgs): Promise<OptionsModel | null> {
   return db.options.create(params)
 }
 
 /**
  *
- * @param params
+ * @param id
  */
-export async function removeOne(params: Prisma.OptionsDeleteArgs) {
-  return db.options.delete(params)
+export async function removeOne(id: string): Promise<OptionsModel | null> {
+  const option = await db.options.findUnique({where: {id}}) as OptionsModel
+  if (!option) return null;
+
+  if (option.categoryIds.length) await db.options.update({
+    where: {id},
+    data: {Categories: {disconnect: option.categoryIds.map(id => ({id}))}}
+  })
+
+  return db.options.delete({where: {id}})
 }
 
 /**

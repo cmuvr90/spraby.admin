@@ -36,11 +36,37 @@ model Brands {
 }
 
 model Options {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   title       String
   description String?
   values      String[]
-  updatedAt   DateTime @updatedAt
-  createdAt   DateTime @default(now())
+  categoryIds String[]     @db.ObjectId
+  updatedAt   DateTime     @updatedAt
+  createdAt   DateTime     @default(now())
+  Categories  Categories[] @relation(fields: [categoryIds], references: [id])
+}
+
+model Categories {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  title         String
+  description   String?
+  optionIds     String[]      @db.ObjectId
+  collectionIds String[]      @db.ObjectId
+  updatedAt     DateTime      @updatedAt
+  createdAt     DateTime      @default(now())
+  Options       Options[]     @relation(fields: [optionIds], references: [id])
+  Collections   Collections[] @relation(fields: [collectionIds], references: [id])
+}
+
+model Collections {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  title       String
+  description String?
+  categoryIds String[]     @db.ObjectId
+  updatedAt   DateTime     @updatedAt
+  createdAt   DateTime     @default(now())
+  Categories  Categories[] @relation(fields: [categoryIds], references: [id])
 }

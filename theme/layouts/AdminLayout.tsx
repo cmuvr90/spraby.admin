@@ -46,7 +46,15 @@ const AdminLayout = ({children}: { children: ReactNode }) => {
     {
       key: '/admin/categories',
       label: 'Categories',
-      icon: <SolutionOutlined/>
+      icon: <SolutionOutlined/>,
+      onTitleClick: (data => router.push(data.key)),
+      children: [{
+        key: '/admin/categories',
+        label: 'List',
+      }, {
+        key: '/admin/categories/create',
+        label: 'Create',
+      }],
     },
     {
       key: '/admin/collections',

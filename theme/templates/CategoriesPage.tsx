@@ -2,34 +2,34 @@
 
 import React, {useState} from "react";
 import {Button, Popconfirm, TableProps} from 'antd';
-import {OptionsModel} from "@/prisma/types";
-import {getPage, removeOne} from "@/services/Options";
+import {CategoriesModel} from "@/prisma/types";
+import {getPage, removeOne} from "@/services/Categories";
 import Link from "next/link";
 import ResourcePicker from "@/theme/snippets/ResourcePicker";
 import {Page} from "@/theme/sections";
 import {useRouter} from "next/navigation";
 
-export default function OptionsPage() {
+export default function CategoriesPage() {
   const router = useRouter();
   const [refresh, setRefresh] = useState<boolean>(false)
 
   const columns: TableProps['columns'] = [
     {
       title: 'Name',
-      render: (_, option: OptionsModel) => {
-        return <Link href={`/admin/options/${option.id}`}>{option.name}</Link>
+      render: (_, category: CategoriesModel) => {
+        return <Link href={`/admin/categories/${category.id}`}>{category.name}</Link>
       }
     },
     {
       title: 'Action',
       align: 'end',
-      render: (_, option: OptionsModel) => {
+      render: (_, category: CategoriesModel) => {
         return <Popconfirm
           title={'Are you sure?'}
           okText="Yes"
           cancelText="No"
           onConfirm={async () => {
-            await removeOne(option.id)
+            await removeOne(category.id)
             setRefresh(v => !v)
           }}>
           <Button danger type={'link'} className={'p-0'}>
@@ -40,10 +40,10 @@ export default function OptionsPage() {
     }
   ];
 
-  return <Page title={'Options'} headerActions={[{
+  return <Page title={'Categories'} headerActions={[{
     content: 'Create',
     type: 'primary',
-    onAction: async () => router.push('/admin/options/create')
+    onAction: async () => router.push('/admin/categories/create')
   }]}>
     <ResourcePicker
       getResourceCallback={params => getPage(params)}
