@@ -1,9 +1,9 @@
 import React from "react";
 import ResourceDrawer from "@/theme/snippets/ResourceDrawer";
-import {getPage} from "@/services/Options";
+import {getPage} from "@/services/Categories";
 import {Button, Card, Popconfirm, Typography} from "antd";
 import {CloseOutlined} from "@ant-design/icons";
-import {OptionsModel} from "@/prisma/types";
+import {CategoriesModel} from "@/prisma/types";
 import {useRouter} from "next/navigation";
 
 /**
@@ -12,16 +12,16 @@ import {useRouter} from "next/navigation";
  * @param onSelect
  * @constructor
  */
-export default function OptionsPicker({selectedItems = [], onChoose, onRemove, disabled}: Props) {
+export default function CategoriesPicker({selectedItems = [], onChoose, onRemove, disabled}: Props) {
   const router = useRouter();
 
-  return <Card title={'Options'}>
+  return <Card title={'Categories'}>
     <div className={'flex gap-3 flex-col'}>
       {
-        selectedItems.map((i: OptionsModel) => {
+        selectedItems.map((i: CategoriesModel) => {
           return <div className={'flex justify-start items-center w-full gap-3'}>
             <Typography.Text>
-              <Button onClick={() => router.push(`/admin/options/${i.id}`)} type={'link'}>{i.name}</Button>
+              <Button onClick={() => router.push(`/admin/categories/${i.id}`)} type={'link'}>{i.name}</Button>
             </Typography.Text>
             {
               !!onRemove &&
@@ -54,7 +54,7 @@ export default function OptionsPicker({selectedItems = [], onChoose, onRemove, d
 }
 
 type Props = {
-  selectedItems?: OptionsModel[]
+  selectedItems?: CategoriesModel[]
   onChoose?: (items: any[]) => Promise<void>
   onRemove?: (id: string) => Promise<void>
   disabled?: boolean

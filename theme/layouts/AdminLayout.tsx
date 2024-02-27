@@ -59,7 +59,15 @@ const AdminLayout = ({children}: { children: ReactNode }) => {
     {
       key: '/admin/collections',
       label: 'Collections',
-      icon: <ProfileOutlined/>
+      icon: <ProfileOutlined/>,
+      onTitleClick: (data => router.push(data.key)),
+      children: [{
+        key: '/admin/collections',
+        label: 'List',
+      }, {
+        key: '/admin/collections/create',
+        label: 'Create',
+      }],
     },
     {
       key: '/admin/options',
